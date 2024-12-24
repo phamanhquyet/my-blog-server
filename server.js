@@ -53,7 +53,6 @@ let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // regex for e
 let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/; // regex for password
 
 const server = express();
-let SERVER_PORT = Number(process.env.SERVER_PORT) || 8888;
 
 mongoose.connect(process.env.MONGODB_URI, {
     autoIndex: true,
@@ -459,6 +458,6 @@ server.post('/api/v1/get-profile', (req, res) => {
     })
 })
 
-server.listen(SERVER_PORT, () => {
-    console.log(`Server is running on port ${SERVER_PORT}`);
+server.listen(3000, () => {
+    console.log(`Server is running on port 3000`);
 })
