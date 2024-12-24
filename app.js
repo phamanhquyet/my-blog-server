@@ -56,14 +56,16 @@ mongoose.connect(process.env.MONGODB_URI, {
     autoIndex: true,
 })
 
-app.use(express.json());
 const corsOptions = {
-    origin: 'https://my-blog-client-inky.vercel.app', 
+    origin: 'https://my-blog-client-inky.vercel.app',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, 
+    credentials: true,
   };
   
 app.use(cors(corsOptions));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 app.get('/', (req, res) => {
     res.send('Hello, Vercel!');
