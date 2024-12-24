@@ -59,6 +59,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.use(express.json());
 const corsOptions = {
     origin: 'https://my-blog-client-inky.vercel.app', 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, 
   };
   
