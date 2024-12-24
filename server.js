@@ -6,14 +6,12 @@ import { nanoid } from "nanoid";
 import jwt from "jsonwebtoken";
 import cors from "cors";
 import admin from "firebase-admin";
-import { readFileSync } from "fs";
 import User from "./Schema/User.js";
 import Blog from "./Schema/Blog.js";
 import { getAuth } from "firebase-admin/auth";
 import cloudinary from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import multer from 'multer';
-import { error } from "console";
 
 const serviceAccountKey = {
     type: process.env.FIREBASE_TYPE,
@@ -60,6 +58,10 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 server.use(express.json());
 server.use(cors());
+
+server.get('/', (req, res) => {
+    res.send('Hello, Vercel!');
+  });
 
 const verifyJWT = (req, res, next) => {
     const authHeader = req.headers['authorization'];
