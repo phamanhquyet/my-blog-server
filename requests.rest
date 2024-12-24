@@ -1,0 +1,83 @@
+POST http://localhost:3000/api/v1/auth/sign-in 
+Content-Type: application/json
+
+{
+    "email": "quyet2@gmail.com",
+    "password": "Quyetka@123"
+}
+
+################################
+
+POST http://localhost:3000/api/v1/auth/sign-up 
+Content-Type: application/json
+
+{
+    "fullname": "Quyet Pham",
+    "email": "quyet3@yahoo.com",
+    "password": "Quyetka@123"
+}
+
+################################
+
+POST http://localhost:3000/api/v1/auth/google-auth
+Content-Type: application/json
+
+{
+    "access_token":"eyJhbGciOiJSUzI1NiIsImtpZCI6IjNmZDA3MmRmYTM4MDU2NzlmMTZmZTQxNzM4YzJhM2FkM2Y5MGIyMTQiLCJ0eXAiOiJKV1QifQ"
+}
+
+################################
+POST http://localhost:3000/api/v1/create-blog
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmM2ODU1YjY0NDMyNzY3ZWZkNzI2YyIsImlhdCI6MTczNDU0NTUzNSwiZXhwIjoxNzM0NTQ5MTM1fQ.lsFCtcECSxstuun2dsgKS3Cbz7_XIugXvqIvFHVHzso
+
+{
+    "title": "test title 10",
+    "banner": "https://picsum.photos/200/300",
+    "des": "test des",
+    "content": {
+        "blocks": [1,2]
+    },
+    "tags": ["tag1", "tag2"]
+}
+
+
+################################
+GET http://localhost:3000/api/v1/latest-blogs
+
+################################
+GET http://localhost:3000/api/v1/trending-blogs
+
+################################
+POST http://localhost:3000/api/v1/search-blogs
+Content-Type: application/json
+
+{
+    "tag": "tag1"
+}
+
+################################
+POST http://localhost:3000/api/v1/search-users
+Content-Type: application/json
+
+{
+    "query": "quyet"
+}
+
+################################
+POST http://localhost:3000/api/v1/get-profile
+Content-Type: application/json
+
+{
+    "username": "quyet"
+}
+
+################################
+POST http://localhost:3000/api/v1/get-blog
+Content-Type: application/json
+
+{
+    "blog_id": "test-title-10R79u70ZtxrXO-5H6QP4k3"
+}
+
+
