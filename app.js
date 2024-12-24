@@ -50,16 +50,16 @@ const uploadCloud = multer({ storage });
 let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // regex for email
 let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/; // regex for password
 
-const server = express();
+const app = express();
 
 mongoose.connect(process.env.MONGODB_URI, {
     autoIndex: true,
 })
 
-server.use(express.json());
-server.use(cors());
+app.use(express.json());
+app.use(cors());
 
-server.get('/', (req, res) => {
+app.get('/', (req, res) => {
     res.send('Hello, Vercel!');
   });
 
@@ -102,7 +102,7 @@ const generateUsername = async(email) => {
     return username;
 }
 
-server.post("/api/v1/auth/sign-up", (req, res) => {
+app.post("/api/v1/auth/sign-up", (req, res) => {
     let { fullname, email, password } = req.body;
 
     if(fullname.length < 3) {
@@ -140,7 +140,7 @@ server.post("/api/v1/auth/sign-up", (req, res) => {
     })
 })
 
-server.post("/api/v1/auth/sign-in", (req, res) => {
+app.post("/api/v1/auth/sign-in", (req, res) => {
     let { email, password } = req.body;
     User.findOne({ "personal_info.email": email})
     .then((user) => {
@@ -169,7 +169,7 @@ server.post("/api/v1/auth/sign-in", (req, res) => {
     })
 })
 
-server.post("/api/v1/auth/google-auth", async (req, res) => {
+app.post("/api/v1/auth/google-auth", async (req, res) => {
     let { access_token } = req.body;
     getAuth()
     .verifyIdToken(access_token)
@@ -211,7 +211,7 @@ server.post("/api/v1/auth/google-auth", async (req, res) => {
     
 })
 
-server.post('/api/v1/upload-image', uploadCloud.single('image'), async (req, res) => {
+app.post('/api/v1/upload-image', uploadCloud.single('image'), async (req, res) => {
     try {
       // File đã được upload lên Cloudinary, thông tin lưu trong req.file
       if (!req.file) {
@@ -229,7 +229,7 @@ server.post('/api/v1/upload-image', uploadCloud.single('image'), async (req, res
     }
   });
 
-server.post('/api/v1/search-blogs-count', (req, res) => {
+app.post('/api/v1/search-blogs-count', (req, res) => {
     let { tag, author, query } = req.body;
     let findQuery;
 
@@ -253,7 +253,7 @@ server.post('/api/v1/search-blogs-count', (req, res) => {
 
 })
 
-server.post('/api/v1/latest-blogs', (req, res) => {
+app.post('/api/v1/latest-blogs', (req, res) => {
     let { page } = req.body;
     let maxLimit = 5;
 
@@ -271,7 +271,7 @@ server.post('/api/v1/latest-blogs', (req, res) => {
     })
 })
 
-server.post('/api/v1/all-latest-blogs-count', (req, res) => {
+app.post('/api/v1/all-latest-blogs-count', (req, res) => {
     Blog.countDocuments({ draft: false })
     .then(count => {
         return res.status(200).json({ totalDocs: count })
@@ -282,7 +282,7 @@ server.post('/api/v1/all-latest-blogs-count', (req, res) => {
     })
 })
 
-server.get('/api/v1/trending-blogs', (req, res) => {
+app.get('/api/v1/trending-blogs', (req, res) => {
     Blog.find({draft: false})
     .populate("author", "personal_info.profile_img personal_info.username personal_info.fullname -_id")
     .sort({"activity.total_read": -1, "activity.total_likes": -1, "publishedAt": -1})
@@ -296,7 +296,7 @@ server.get('/api/v1/trending-blogs', (req, res) => {
     })
 })
 
-server.post('/api/v1/search-blogs', (req, res) => {
+app.post('/api/v1/search-blogs', (req, res) => {
     let { tag, query, author, page, limit, eliminate_blog } = req.body;
     let findQuery;
     
@@ -324,7 +324,7 @@ server.post('/api/v1/search-blogs', (req, res) => {
     })
 })
 
-server.post('/api/v1/get-blog', (req, res) => {
+app.post('/api/v1/get-blog', (req, res) => {
     let { blog_id, draft, mode } = req.body;
     let incrementVal = mode != 'edit' ? 1 : 0;
 
@@ -349,7 +349,7 @@ server.post('/api/v1/get-blog', (req, res) => {
     })
 })
 
-server.post('/api/v1/create-blog', verifyJWT, (req, res) => {
+app.post('/api/v1/create-blog', verifyJWT, (req, res) => {
     let authorId = req.user;
 
     let { title, des, banner, tags, content, draft, id } = req.body.blogData;
@@ -432,7 +432,7 @@ server.post('/api/v1/create-blog', verifyJWT, (req, res) => {
 
 })
 
-server.post('/api/v1/search-users', (req, res) => {
+app.post('/api/v1/search-users', (req, res) => {
     let { query } = req.body
 
     User.find({"personal_info.username": new RegExp(query, 'i')})
@@ -446,7 +446,7 @@ server.post('/api/v1/search-users', (req, res) => {
     })
 })
 
-server.post('/api/v1/get-profile', (req, res) => {
+app.post('/api/v1/get-profile', (req, res) => {
     let { username } = req.body;
     
     User.findOne({ "personal_info.username": username })
@@ -460,6 +460,5 @@ server.post('/api/v1/get-profile', (req, res) => {
     })
 })
 
-server.listen(3000, () => {
-    console.log(`Server is running on port 3000`);
-})
+
+export default app;
